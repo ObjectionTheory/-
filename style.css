@@ -1,0 +1,24 @@
+#time {
+    padding-top: 5%;
+    text-align: center;
+    font-family: monospace;
+    color: #efefef;
+    font-size: 5em;
+}
+
+.background {
+    background-color: #101010;
+    position: absolute;
+    top: 0px; /* Header Height */
+    bottom: 0px; /* Footer Height */
+    width: 100%;
+}
+
+.cube {
+    position: absolute;
+    left: 50%;
+    top: 65%;               
+    transform: translate(-50%, -60%);
+    width: 40%;
+
+}
