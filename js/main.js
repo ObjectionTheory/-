@@ -1,22 +1,113 @@
-var countDownDate = new Date("Feb 2, 2019 12:00:00").getTime();
+var renderer, scene, camera, composer, circle, skelet, particle;
+var cubeDepth = 5;
+var base = 4;
+var objects = [];
 
-var x = setInterval(function() {
-    
-    var now = new Date().getTime();
-    var distance = countDownDate - now;
-    
-    // Display the result in the element with id="demo"
-    $("#time").html(distance);
-    $("#time").lettering();
+window.onload = function() {
+  init();
+  animate();
+}
 
-    for (var i = 1; i <= 9; i++) {
-        $(".char" + i).css('border', '3px solid white');
-        $(".char" + i).css('padding', "1%"); 
-        $(".char" + i).css("margin", "2%");
-    }
-    // If the count down is finished, write some text 
-    if (distance < 0) {
-    clearInterval(x);
-    $("#time").html("distance");
-    }
-}, 150);
+function init() {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.autoClear = false;
+  renderer.setClearColor(0x000000, 0.0);
+  $("#canvas").append(renderer.domElement);
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+  camera.position.z = 400;
+  scene.add(camera);
+
+  particle = new THREE.Object3D();
+  scene.add(particle);
+  var geometry = new THREE.TetrahedronGeometry(2, 0);
+
+  var skeletonMaterial = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    wireframe: true,
+    side: THREE.DoubleSide
+
+  });
+
+  for (var i = 0; i < cubeDepth; i++) {
+    var planet = new THREE.Object3D();
+    objects.push(planet);
+    scene.add(planet);
+  }
+
+  var cubeGeometries = [];
+  for (var i = 0; i < cubeDepth; i++ ){
+      var cube = new THREE.IcosahedronGeometry(i*base, 1);
+      var planet = new THREE.Mesh(cube, skeletonMaterial);
+      planet.scale.x = planet.scale.y = planet.scale.z = i * base;
+      planet.rotation.x = planet.rotation.y = planet.rotation.z = Math.random();
+      objects[i].add(planet);
+
+  }
+  var material = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    shading: THREE.FlatShading
+  });
+
+  for (var i = 0; i < 1000; i++) {
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(Math.random() - 0.5 ,Math.random() - 0.5, Math.random() - 0.5).normalize();
+    mesh.position.multiplyScalar(90 + (Math.random() * 700));
+    mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+    particle.add(mesh);
+  }
+
+  var mat = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    shading: THREE.FlatShading
+  });
+  
+
+  var ambientLight = new THREE.AmbientLight(0x999999 );
+  scene.add(ambientLight);
+  
+  var lights = [];
+lights[0] = new THREE.DirectionalLight( 0xffffff, 1 );
+lights[0].position.set( 1, 0, 0 );
+lights[1] = new THREE.DirectionalLight( 0x82a017, 1 );
+lights[1].position.set( 0.75, 1, 0.5 );
+lights[2] = new THREE.DirectionalLight( 0x51c2ff, 1 );
+lights[2].position.set( -0.75, -1, 0.5 );
+scene.add( lights[0] );
+scene.add( lights[1] );
+scene.add( lights[2] );
+  
+
+  window.addEventListener('resize', onWindowResize, false);
+
+};
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  particle.rotation.x += 0.0020;
+  particle.rotation.y -= 0.0040;
+  /*circle.rotation.x -= 0.0020;
+  circle.rotation.y -= 0.0030;
+  skelet.rotation.x -= 0.0010;
+  skelet.rotation.y += 0.0020;*/
+  for (var i = 0; i < cubeDepth; i++) {
+    objects[i].rotation.x += 0.0020 / (i-2);
+    objects[i].rotation.y -= 0.0040 / (i-2);
+  }
+  renderer.clear();
+
+  renderer.render( scene, camera )
+};
+
+

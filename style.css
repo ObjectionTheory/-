@@ -6,12 +6,19 @@
     font-size: 5em;
 }
 
-.background {
-    background-color: #101010;
+#canvas {
     position: absolute;
-    top: 0px; /* Header Height */
-    bottom: 0px; /* Footer Height */
+    top: 0%;
+}
+
+.background {
+    background: -webkit-linear-gradient(top,  #82a017 0%,#51c2ff 100%);
+    /*background-color: #101010;*/
+    position: absolute;
+    top: 1px; /* Header Height */
+    bottom: 1px; /* Footer Height */
     width: 100%;
+    min-height: calc(100vh);
 }
 
 .cube {
