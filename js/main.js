@@ -1,13 +1,13 @@
 var renderer, scene, camera, composer, particle;
-var cubeDepth = 7;
-var base = 3;
+var cubeDepth = 10;
+var base = 5;
 var objects = [];
 var theta = 0;
 
 window.onload = function() {
   init();
   animate();
-  
+
 }
 
 function init() {
