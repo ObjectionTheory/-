@@ -1,7 +1,8 @@
-var renderer, scene, camera, composer, circle, skelet, particle;
-var cubeDepth = 5;
-var base = 4;
+var renderer, scene, camera, composer, particle;
+var cubeDepth = 7;
+var base = 3;
 var objects = [];
+var theta = 0;
 
 window.onload = function() {
   init();
@@ -19,7 +20,7 @@ function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.z = 400;
+  camera.position.z = 500;
   scene.add(camera);
 
   particle = new THREE.Object3D();
@@ -28,10 +29,16 @@ function init() {
 
   var skeletonMaterial = new THREE.MeshPhongMaterial({
     color: 0xffffff,
-    wireframe: true,
-    side: THREE.DoubleSide
+    wireframe: true
 
   });
+  
+  
+  var material = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    shading: THREE.FlatShading
+  });
+
 
   for (var i = 0; i < cubeDepth; i++) {
     var planet = new THREE.Object3D();
@@ -41,18 +48,18 @@ function init() {
 
   var cubeGeometries = [];
   for (var i = 0; i < cubeDepth; i++ ){
-      var cube = new THREE.IcosahedronGeometry(i*base, 1);
+      var cube = new THREE.CubeGeometry(i*base, i*base, i*base);
       var planet = new THREE.Mesh(cube, skeletonMaterial);
       planet.scale.x = planet.scale.y = planet.scale.z = i * base;
-      planet.rotation.x = planet.rotation.y = planet.rotation.z = Math.random();
+      planet.rotation.x = Math.random();
+      planet.rotation.y = Math.random(); 
+      planet.rotation.z = Math.random();
+      planet.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      planet.position.multiplyScalar(90 + (Math.random() * 500));
       objects[i].add(planet);
 
   }
-  var material = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    shading: THREE.FlatShading
-  });
-
+ 
   for (var i = 0; i < 1000; i++) {
     var mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(Math.random() - 0.5 ,Math.random() - 0.5, Math.random() - 0.5).normalize();
@@ -61,11 +68,6 @@ function init() {
     particle.add(mesh);
   }
 
-  var mat = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    shading: THREE.FlatShading
-  });
-  
 
   var ambientLight = new THREE.AmbientLight(0x999999 );
   scene.add(ambientLight);
@@ -81,7 +83,6 @@ scene.add( lights[0] );
 scene.add( lights[1] );
 scene.add( lights[2] );
   
-
   window.addEventListener('resize', onWindowResize, false);
 
 };
@@ -97,14 +98,14 @@ function animate() {
 
   particle.rotation.x += 0.0020;
   particle.rotation.y -= 0.0040;
-  /*circle.rotation.x -= 0.0020;
-  circle.rotation.y -= 0.0030;
-  skelet.rotation.x -= 0.0010;
-  skelet.rotation.y += 0.0020;*/
+  
   for (var i = 0; i < cubeDepth; i++) {
     objects[i].rotation.x += 0.0020 / (i-2);
     objects[i].rotation.y -= 0.0040 / (i-2);
+    
   }
+  theta += 0.001;
+  
   renderer.clear();
 
   renderer.render( scene, camera )
