@@ -7,6 +7,7 @@ var theta = 0;
 window.onload = function() {
   init();
   animate();
+  
 }
 
 function init() {
