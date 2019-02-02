@@ -18,5 +18,6 @@ var x = setInterval(function() {
     if (distance < 0) {
     clearInterval(x);
     $("#time").html("distance");
+        
     }
 }, 150);
