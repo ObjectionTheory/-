@@ -1,10 +1,10 @@
 var countDownDate = new Date("Feb 2, 2019 12:00:00").getTime();
 
 var x = setInterval(function() {
-    
+
     var now = new Date().getTime();
     var distance = countDownDate - now;
-    
+
     // Display the result in the element with id="demo"
     $("#time").html(distance);
     $("#time").lettering();
@@ -18,6 +18,5 @@ var x = setInterval(function() {
     if (distance < 0) {
     clearInterval(x);
     $("#time").html("distance");
-        
     }
-}, 150);
+}, 150); 
