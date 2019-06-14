@@ -1,1 +1,1 @@
-$("#time").html("HAPPY BIRTHDAY LUCY!!!");
+$("#time").html("???");
